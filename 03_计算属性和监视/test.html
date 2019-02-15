@@ -17,16 +17,74 @@
   计算属性存在缓存, 多次读取只执行一次getter计算
 -->
 <div id="demo">
-  姓: <input type="text" placeholder="First Name"><br>
-  名: <input type="text" placeholder="Last Name"><br>
-  姓名1(单向): <input type="text" placeholder="Full Name1"><br>
-  姓名2(单向): <input type="text" placeholder="Full Name2"><br>
-  姓名3(双向): <input type="text" placeholder="Full Name3"><br>
+  姓: <input type="text" placeholder="First Name" v-model="firstName"><br>
+  名: <input type="text" placeholder="Last Name" v-model="lastName"><br>
+  姓名1(单向): <input type="text" placeholder="Full Name1" v-model="fullName1"><br>
+  姓名2(单向): <input type="text" placeholder="Full Name2" v-model="fullName2"><br>
+  姓名3(双向): <input type="text" placeholder="Full Name3" v-model="fullName3"><br>
+
+  <p>{{fullName1}}</p>
+  <p>{{fullName1}}</p>
+  <p>{{fullName1}}</p>
+  <p>{{fullName1}}</p>
+  <p>{{fullName1}}</p>
+  <p>{{fullName1}}</p>
+  <p>{{fullName3}}</p>
+  <p>{{fullName3}}</p>
+  <p>{{fullName3}}</p>
+  <p>{{fullName3}}</p>
 </div>
 
 <script type="text/javascript" src="../js/vue.js"></script>
 <script type="text/javascript">
+  const vm = new Vue({
+    el: '#demo',
+    data () {
+      return {
+        firstName: 'A',
+        lastName: 'B',
+        fullName2: 'A-B'
+      }
+    },
+    // 计算属性
+    computed: {
+      // 相当于getter 什么调用? 初始显示/ 相关的状态数据发生变化
+      fullName1 () {
+        console.log('fullName1()')
+        return this.firstName + '-' + this.lastName
+      },
 
+      fullName3: {
+        // getter: 初始显示/ 相关的状态数据发生变化时自动调用
+        get () {
+          console.log('fullName3 get()')
+          return this.firstName + '-' + this.lastName
+        },
+
+        // setter: 当属性值发生了改变时自动调用
+        set (value) {
+          console.log('fullName3 set()', value)
+          const names = value.split('-')
+          this.firstName = names[0]
+          this.lastName = names[1]
+        }
+      }
+    },
+
+    watch: {
+      // 监视firstName
+      firstName (value) {// firstName发生了改变时自动调用
+        // 更新fullName2
+        this.fullName2 = value + '-' + this.lastName
+      }
+    }
+
+  })
+
+  // 监视lastName
+  vm.$watch('lastName', function (value) {
+    this.fullName2 = this.firstName + '-' + value
+  })
 </script>
 </body>
 </html>
