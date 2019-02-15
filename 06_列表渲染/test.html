@@ -17,13 +17,57 @@
 
 <div id="demo">
   <h2>测试: v-for 遍历数组</h2>
+  <ul>
+    <li v-for="(p, index) in persons" :key="index">
+      {{index}}---{{p.name}}---{{p.age}}
+      ---<button @click="deleteP(index)">删除</button>
+      ---<button @click="updateP(index, {name: 'Cat', age: 20})">更新</button>
+    </li>
+  </ul>
 
   <h2>测试: v-for 遍历对象</h2>
+  <ul>
+    <li v-for="(value, key) in persons[1]">
+      {{key}}={{value}}
+    </li>
+  </ul>
 
 </div>
 
 <script type="text/javascript" src="../js/vue.js"></script>
 <script type="text/javascript">
+  new Vue({
+    el: '#demo',
+    data: {
+      persons: [
+        {name: 'Tom', age: 16},
+        {name: 'Jack', age: 14},
+        {name: 'Bob', age: 15},
+        {name: 'Jerry', age: 18},
+        {name: 'Marry', age: 17}
+      ]
+    },
+    methods: {
+      deleteP (index) {
+        /*
+        数组变异方法: 重写了数组的更新方法
+            1. 调用原生数组原本的方法
+            2. 更新界面
+         */
+        this.persons.splice(index, 1)// splice()不是原生数组的方法, 而一个重写的变异方法
+      },
+      updateP (index, newP) {
+        // this.persons[index] = newP // 没有更新persons属性本身
+        // this.persons = []
+        this.persons.splice(index, 1, newP)
+      }
+    }
+  })
+
+  var p = {name: 'tom'}
+
+  p.name = 'jack'
+
 
 </script>
 </body>
