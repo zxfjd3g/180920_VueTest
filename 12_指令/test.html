@@ -7,7 +7,7 @@
 <body>
 <!--
 常用内置指令
-  v:text : 更新元素的 textContent
+  v-text : 更新元素的 textContent
   v-html : 更新元素的 innerHTML
   v-if : 如果为true, 当前标签才会输出到页面
   v-else: 如果为false, 当前标签才会输出到页面
@@ -17,15 +17,28 @@
   v-bind : 强制绑定解析表达式, 可以省略v-bind
   v-model : 双向数据绑定
   ref : 为某个元素注册一个唯一标识, vue对象通过$els属性访问这个元素对象
-  v-cloak : 使用它防止闪现表达式, 与css配合: [v-cloak] { display: none }
 -->
 <div id="example">
-
+  <p>aaaaaccc{{content}}</p>
+  <p v-html="content"></p>  <!--p.innerHTML = content-->
+  <p v-text="content"></p>  <!--p.textContent = content-->
+  <p ref="name">atguigu.com</p>
+  <button @click="hint">提示</button>
 </div>
 
 <script type="text/javascript" src="../js/vue.js"></script>
 <script type="text/javascript">
-
+  new Vue({
+    el: '#example',
+    data: {
+      content: '<a href="http://www.baidu.com">百度</a>'
+    },
+    methods: {
+      hint () {
+        alert(this.$refs.name.textContent)
+      }
+    }
+  })
 </script>
 </body>
 </html>
